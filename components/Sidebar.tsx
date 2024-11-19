@@ -19,6 +19,7 @@ import {
   where,
 } from 'firebase/firestore';
 import { db } from '@/firebase';
+import SidebarOption from './SidebarOption';
 
 interface RoomDocument extends DocumentData {
   createdAt: string;
@@ -88,7 +89,35 @@ function Sidebar() {
             </h2>
 
             {groupedDocuments.owner.map((document) => {
-              return <p key={document.roomId}>{document.roomId}</p>;
+              return (
+                <SidebarOption
+                  key={document.roomId}
+                  href={`/document/${document.roomId}`}
+                  id={document.roomId}
+                />
+              );
+            })}
+          </>
+        )}
+
+        {groupedDocuments.editor.length === 0 ? (
+          <h2 className='text-gray-500 font-semibold text-sm'>
+            No Documents Found
+          </h2>
+        ) : (
+          <>
+            <h2 className='text-gray-500 font-semibold text-sm'>
+              Shared with me
+            </h2>
+
+            {groupedDocuments.editor.map((document) => {
+              return (
+                <SidebarOption
+                  key={document.roomId}
+                  href={`/document/${document.roomId}`}
+                  id={document.roomId}
+                />
+              );
             })}
           </>
         )}
