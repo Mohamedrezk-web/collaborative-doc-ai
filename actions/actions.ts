@@ -73,3 +73,19 @@ export async function inviteUserToDocument(id: string, email: string) {
     return { success: false };
   }
 }
+
+export async function removeUserFromDocument(id: string, userId: string) {
+  try {
+    await adminDb
+      .collection('users')
+      .doc(userId)
+      .collection('rooms')
+      .doc(id)
+      .delete();
+
+    return { success: true };
+  } catch (error) {
+    console.error(error);
+    return { success: false };
+  }
+}
