@@ -1,14 +1,16 @@
 import RoomProvider from '@/components/RoomProvider';
-import { auth } from '@clerk/nextjs/server';
 import React from 'react';
 
-function DocumentLayout({
+async function DocumentLayout({
   children,
-  params: { id },
+  params,
 }: {
   children: React.ReactNode;
   params: { id: string };
 }) {
+  // Awaiting `params.id` if needed
+  const { id } = await params;
+
   return <RoomProvider roomId={id}>{children}</RoomProvider>;
 }
 
