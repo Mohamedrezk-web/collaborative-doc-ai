@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import './globals.css';
-import { ClerkProvider } from '@clerk/nextjs';
+import { ClerkProvider, SignIn } from '@clerk/nextjs';
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import { Toaster } from '@/components/ui/sonner';
+import { auth } from '@clerk/nextjs/server';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -27,12 +28,12 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <ClerkProvider>
-      <html lang='en'>
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
+  async function getLayout() {
+    const Auth = await auth();
+    const { userId } = Auth;
+    if (userId) {
+      return (
+        <>
           <Header />
           <div className='flex min-h-screen '>
             <Sidebar />
@@ -42,6 +43,23 @@ export default function RootLayout({
           </div>
 
           <Toaster />
+        </>
+      );
+    } else {
+      return (
+        <div className='flex min-h-screen items-center justify-center'>
+          <SignIn routing='hash' />
+        </div>
+      );
+    }
+  }
+  return (
+    <ClerkProvider>
+      <html lang='en'>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased  h-screen`}
+        >
+          {getLayout()}
         </body>
       </html>
     </ClerkProvider>

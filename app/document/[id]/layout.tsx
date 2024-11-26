@@ -1,17 +1,18 @@
 import RoomProvider from '@/components/RoomProvider';
 import React from 'react';
 
+// Ensure params matches the expected type of a Promise
 async function DocumentLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: { id: string };
+  params: Promise<{ id: string }>; // Ensure params is typed as a Promise
 }) {
-  // Awaiting `params.id` if needed
-  const { id } = await params;
+  // Await the params since it is strictly a Promise
+  const resolvedParams = await params;
 
-  return <RoomProvider roomId={id}>{children}</RoomProvider>;
+  return <RoomProvider roomId={resolvedParams.id}>{children}</RoomProvider>;
 }
 
 export default DocumentLayout;

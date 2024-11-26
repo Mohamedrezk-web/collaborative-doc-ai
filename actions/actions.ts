@@ -6,7 +6,6 @@ import { auth } from '@clerk/nextjs/server';
 
 export async function createNewDocument() {
   const Auth = await auth();
-  if (!Auth.userId) return Auth.redirectToSignIn();
 
   const { sessionClaims } = Auth;
 

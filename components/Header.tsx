@@ -1,12 +1,6 @@
 'use client';
 import React from 'react';
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-  useUser,
-} from '@clerk/nextjs';
+import { UserButton, useUser } from '@clerk/nextjs';
 import Breadcrumbs from './Breadcrumbs';
 export default function Header() {
   const { user } = useUser();
@@ -22,13 +16,7 @@ export default function Header() {
 
       <Breadcrumbs />
       <div>
-        <SignedOut>
-          <SignInButton></SignInButton>
-        </SignedOut>
-
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+        <UserButton />
       </div>
     </div>
   );
