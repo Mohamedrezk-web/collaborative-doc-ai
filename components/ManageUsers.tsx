@@ -18,6 +18,7 @@ import { useRoom } from '@liveblocks/react/suspense';
 import { toast } from 'sonner';
 import { removeUserFromDocument } from '@/actions/actions';
 import { collectionGroup, query, where } from 'firebase/firestore';
+import { Users } from 'lucide-react';
 
 function InviteUser() {
   const { user } = useUser();
@@ -43,7 +44,9 @@ function InviteUser() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <Button asChild variant={'outline'}>
-        <DialogTrigger>Users ({usersInRoom?.docs.length})</DialogTrigger>
+        <DialogTrigger>
+          <Users />
+        </DialogTrigger>
       </Button>
       <DialogContent>
         <DialogHeader>

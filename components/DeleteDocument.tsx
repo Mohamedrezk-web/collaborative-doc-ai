@@ -14,6 +14,7 @@ import {
 import { usePathname, useRouter } from 'next/navigation';
 import { deleteDocument } from '@/actions/actions';
 import { toast } from 'sonner';
+import { Trash2 } from 'lucide-react';
 
 function DeleteDocument() {
   const pathname = usePathname(); // Ensure this is outside any callback
@@ -40,7 +41,12 @@ function DeleteDocument() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <Button asChild variant={'destructive'}>
-        <DialogTrigger>Delete</DialogTrigger>
+        <DialogTrigger>
+          <span className='hidden md:block'>Delete</span>
+          <span className='block md:hidden'>
+            <Trash2 />
+          </span>
+        </DialogTrigger>
       </Button>
       <DialogContent>
         <DialogHeader>

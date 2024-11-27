@@ -16,9 +16,7 @@ function Avatars() {
   const allAvatars = [...others, self];
   return (
     <div className='flex gap-2 items-center'>
-      <p className='font-light text-sm'>
-        Users currently editing this document
-      </p>
+      <p className='font-light text-sm'>Currently editing</p>
 
       <div className='flex -space-x-5'></div>
       {allAvatars.map((avatar, i) => (

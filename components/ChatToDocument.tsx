@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from './ui/button';
 
-import { BotIcon, LanguagesIcon } from 'lucide-react';
+import { BotIcon, BotMessageSquareIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import MarkDown from 'react-markdown';
 import { Input } from './ui/input';
@@ -55,8 +55,8 @@ function ChatToDocument({ document }: { document: Y.Doc }) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <Button asChild variant={'outline'}>
         <DialogTrigger>
-          <LanguagesIcon />
-          Chat to the document
+          <BotMessageSquareIcon className='w-10 flex-shrink-0' />
+          <span className='hidden md:block'>Chat to the document</span>
         </DialogTrigger>
       </Button>
       <DialogContent>

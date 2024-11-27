@@ -3,18 +3,17 @@ import React, { useState, useTransition } from 'react';
 import { Button } from './ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { usePathname, useRouter } from 'next/navigation';
-import { deleteDocument, inviteUserToDocument } from '@/actions/actions';
+import { usePathname } from 'next/navigation';
+import { inviteUserToDocument } from '@/actions/actions';
 import { toast } from 'sonner';
 import { Input } from './ui/input';
+import { UserRoundPlus } from 'lucide-react';
 
 function InviteUser() {
   const pathname = usePathname(); // Ensure this is outside any callback
@@ -42,7 +41,12 @@ function InviteUser() {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <Button asChild variant={'outline'}>
-        <DialogTrigger>Invite</DialogTrigger>
+        <DialogTrigger>
+          <span className='hidden md:block'>Invite</span>
+          <span className='block md:hidden'>
+            <UserRoundPlus />
+          </span>
+        </DialogTrigger>
       </Button>
       <DialogContent>
         <DialogHeader>

@@ -10,6 +10,8 @@ import DeleteDocument from './DeleteDocument';
 import InviteUser from './InviteUser';
 import ManageUsers from './ManageUsers';
 import Avatars from './Avatars';
+import { Pencil } from 'lucide-react';
+import LoadingSpinner from './LoadingSpinner';
 
 function Document({ id }: { id: string }) {
   const [data, loading, error] = useDocumentData(doc(db, 'documents', id));
@@ -32,22 +34,32 @@ function Document({ id }: { id: string }) {
   return (
     <div className='flex-1 h-full bg-white p-5'>
       <div className='flex max-w-6xl mx-auto justify-between pb-5'>
-        <form className='flex flex-1 space-x-2 ' onSubmit={updateTitle}>
-          <Input
-            type='text'
-            placeholder='Document Name'
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-          />
-          <Button disabled={isUpdating} type='submit'>
-            {isUpdating ? 'Uploading...' : 'Update'}
-          </Button>
+        <form
+          className='flex flex-1 flex-col space-y-2 md:flex-row md:space-x-2 md:space-y-0'
+          onSubmit={updateTitle}
+        >
+          <div className='flex flex-row space-x-2 md:w-full'>
+            <Input
+              type='text'
+              placeholder='Document Name'
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+            <Button disabled={isUpdating} type='submit'>
+              <span className='hidden md:block'>
+                {isUpdating ? 'Updating...' : 'Update'}
+              </span>
+              <span className='block md:hidden'>
+                {isUpdating ? <LoadingSpinner w='w-4' h='h-4' /> : <Pencil />}
+              </span>
+            </Button>
+          </div>
 
           {isOwner && (
-            <>
-              <DeleteDocument />
+            <div className='flex flex-row space-x-2 justify-end  '>
               <InviteUser />
-            </>
+              <DeleteDocument />
+            </div>
           )}
         </form>
       </div>
