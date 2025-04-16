@@ -5,7 +5,7 @@ import { auth } from '@clerk/nextjs/server';
 
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { sessionClaims } = await auth();
@@ -15,7 +15,8 @@ export async function GET(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const id = await Promise.resolve(context.params.id);
+    const resolvedParams = await params;
+    const id = resolvedParams.id;
     const documentsCollection = await getCollection('documents');
     const document = await documentsCollection.findOne({
       _id: new ObjectId(id),
@@ -40,7 +41,7 @@ export async function GET(
 
 export async function PATCH(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { sessionClaims } = await auth();
@@ -51,7 +52,8 @@ export async function PATCH(
     }
 
     const { title } = await req.json();
-    const id = await Promise.resolve(context.params.id);
+    const resolvedParams = await params;
+    const id = resolvedParams.id;
 
     const documentsCollection = await getCollection('documents');
     const result = await documentsCollection.updateOne(
@@ -78,7 +80,7 @@ export async function PATCH(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { sessionClaims } = await auth();
@@ -88,7 +90,8 @@ export async function DELETE(
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const id = await Promise.resolve(context.params.id);
+    const resolvedParams = await params;
+    const id = resolvedParams.id;
     const documentsCollection = await getCollection('documents');
     const userRoomsCollection = await getCollection('rooms');
 
