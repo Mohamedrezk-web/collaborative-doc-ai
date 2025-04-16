@@ -1,4 +1,4 @@
-import { adminDb } from '@/firebase-admin';
+import { getCollection } from '@/lib/mongodb';
 import liveblocks from '@/lib/liveblocks';
 import { auth } from '@clerk/nextjs/server';
 import { NextRequest } from 'next/server';
@@ -15,14 +15,13 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  const usersInRoom = await adminDb
-    .collectionGroup('rooms')
-    .where('userId', '==', sessionClaims?.email)
-    .get();
+  const userRoomsCollection = await getCollection('rooms');
+  const userInRoom = await userRoomsCollection.findOne({
+    userId: sessionClaims?.email,
+    roomId: room,
+  });
 
-  const userInRoom = usersInRoom.docs.find((doc) => doc.id === room);
-
-  if (userInRoom?.exists) {
+  if (userInRoom) {
     session.allow(room, session.FULL_ACCESS);
     const { body, status } = await session.authorize();
 

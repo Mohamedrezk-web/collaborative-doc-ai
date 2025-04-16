@@ -1,44 +1,72 @@
-# CollaborativeDocAI
+# Notion AI Clone
 
-CollaborativeDocAI is a powerful document editing and management platform inspired by Notion, powered by AI, and optimized for real-time collaboration. It leverages modern frameworks and libraries like Next.js, Firebase, and Liveblocks to create a seamless, responsive, and interactive user experience.
+A collaborative document editing application built with modern web frameworks and libraries like Next.js, MongoDB, and Liveblocks to create a seamless, responsive, and interactive user experience.
 
 ## Features
 
-- **AI-Powered Editing**: Use AI to assist in content generation and translation.
-- **Real-Time Collaboration**: Collaborate with team members in real-time with synchronized editing.
-- **Responsive Design**: Built with TailwindCSS for a fully responsive UI.
-- **Customizable Themes**: Supports light and dark themes using `next-themes`.
-- **Notifications and Toasts**: User feedback with Radix UI and Sonner.
-- **Secure Authentication**: User authentication via Clerk and Firebase.
-- **Rich Text Editing**: Built with BlockNote, enabling rich-text editing with advanced features.
-- **Modular Design**: Designed with a scalable and modular component structure.
+- **Real-time Collaboration**: Multiple users can edit documents simultaneously.
+- **Rich Text Editor**: Support for various text formatting options.
+- **Document Organization**: Create, manage, and organize documents efficiently.
+- **Secure Authentication**: User authentication via Clerk.
+- **Responsive Design**: Works seamlessly across different devices and screen sizes.
 
 ## Tech Stack
 
-- **Framework**: [Next.js](https://nextjs.org/)
-- **React**: Version 19 (React experimental RC)
-- **CSS**: TailwindCSS
-- **Realtime Collaboration**: Liveblocks
-- **Rich Text Editor**: BlockNote
-- **Authentication**: Clerk and Firebase
-- **Database**: Firebase Firestore
-- **Animation**: Framer Motion
-- **Markdown Rendering**: React Markdown
+- **Framework**: Next.js 14 with App Router
+- **Language**: TypeScript
+- **Authentication**: Clerk
+- **Database**: MongoDB
+- **Real-time Collaboration**: Liveblocks
+- **UI Components**: Shadcn UI
+- **Styling**: Tailwind CSS
 
-## Installation
+## Prerequisites
 
-To run this project locally, follow these steps:
+Before you begin, ensure you have the following:
 
-### Prerequisites
+- Node.js (v18 or higher)
+- MongoDB instance (local or Atlas)
+- Clerk account for authentication
+- Liveblocks account for real-time collaboration
 
-- Node.js (>= 16)
-- npm or yarn
-- Firebase Project (if using Firebase)
-
-### Steps
+## Getting Started
 
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/CollaborativeDocAI.git
-   cd collaborative-doc-ai
-   ```
+
+```bash
+git clone https://github.com/yourusername/notion-ai-clone.git
+cd notion-ai-clone
+```
+
+2. Install dependencies:
+
+```bash
+npm install
+```
+
+3. Set up environment variables:
+   Create a `.env.local` file in the root directory and add the following:
+
+```
+MONGODB_URI=your_mongodb_uri
+MONGODB_DB=notion_clone
+CLERK_SECRET_KEY=your_clerk_secret_key
+LIVEBLOCKS_SECRET_KEY=your_liveblocks_secret_key
+NEXT_PUBLIC_BASE_URL=your_api_base_url
+```
+
+4. Run the development server:
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

@@ -2,17 +2,20 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { db } from '@/firebase';
-import { doc } from 'firebase/firestore';
 import { usePathname } from 'next/navigation';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 function SidebarOption({ href, id }: { href: string; id: string }) {
-  const [data, loading, error] = useDocumentData(doc(db, 'documents', id));
+  const { data, error, isLoading } = useSWR(`/api/documents/${id}`, fetcher);
   const pathName = usePathname();
   const isActive = href.includes(pathName) && pathName !== '/';
 
+  if (error) return null;
+  if (isLoading) return null;
   if (!data) return null;
+
   return (
     <Link
       href={href}
@@ -20,7 +23,7 @@ function SidebarOption({ href, id }: { href: string; id: string }) {
         isActive ? 'bg-gray-300 font-bold border-black' : 'border-gray-400'
       }`}
     >
-      <p className='turncate'>{data.title}</p>
+      <p className='truncate'>{data.title}</p>
     </Link>
   );
 }

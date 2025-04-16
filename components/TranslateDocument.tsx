@@ -38,7 +38,7 @@ function TranslateDocument({ document }: { document: Y.Doc }) {
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
-  const handelAskQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleAskQuestion = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     startTransition(async () => {
@@ -92,7 +92,7 @@ function TranslateDocument({ document }: { document: Y.Doc }) {
             <p>{isPending ? 'Let me cook' : <MarkDown>{summary}</MarkDown>}</p>
           </div>
         )}
-        <form className='flex gap-2' onSubmit={handelAskQuestion}>
+        <form className='flex gap-2' onSubmit={handleAskQuestion}>
           <Select
             value={language}
             onValueChange={(value) => setLanguage(value as Language)}

@@ -1,9 +1,6 @@
-import React, { useEffect, useState, useTransition } from 'react';
+import React, { useState, useTransition } from 'react';
 import { Input } from './ui/input';
 import { Button } from './ui/button';
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '@/firebase';
-import { useDocumentData } from 'react-firebase-hooks/firestore';
 import Editor from './Editor';
 import useOwner from '@/lib/useOwner';
 import DeleteDocument from './DeleteDocument';
@@ -12,25 +9,39 @@ import ManageUsers from './ManageUsers';
 import Avatars from './Avatars';
 import { Pencil } from 'lucide-react';
 import LoadingSpinner from './LoadingSpinner';
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 function Document({ id }: { id: string }) {
-  const [data, loading, error] = useDocumentData(doc(db, 'documents', id));
+  const { data, error, isLoading } = useSWR(`/api/documents/${id}`, fetcher);
   const [input, setInput] = useState('');
   const [isUpdating, startTransition] = useTransition();
   const isOwner = useOwner();
-  const updateTitle = (e: React.FormEvent<HTMLFormElement>) => {
+
+  const updateTitle = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input.trim()) return;
     startTransition(async () => {
-      await updateDoc(doc(db, 'documents', id), { title: input });
+      await fetch(`/api/documents/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title: input }),
+      });
     });
   };
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (data) {
       setInput(data.title);
     }
   }, [data]);
+
+  if (error) return <div>Failed to load document</div>;
+  if (isLoading) return <LoadingSpinner w='w-10' h='h-10' />;
+
   return (
     <div className='flex-1 h-full bg-white p-5'>
       <div className='flex max-w-6xl mx-auto justify-between pb-5'>

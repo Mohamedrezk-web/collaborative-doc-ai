@@ -1,5 +1,5 @@
 'use client';
-import React, { use, useState, useTransition } from 'react';
+import React, { useState, useTransition } from 'react';
 import { Button } from './ui/button';
 import {
   Dialog,
@@ -12,23 +12,21 @@ import {
 
 import { useUser } from '@clerk/nextjs';
 import useOwner from '@/lib/useOwner';
-import { useCollection } from 'react-firebase-hooks/firestore';
-import { db } from '@/firebase';
 import { useRoom } from '@liveblocks/react/suspense';
 import { toast } from 'sonner';
 import { removeUserFromDocument } from '@/actions/actions';
-import { collectionGroup, query, where } from 'firebase/firestore';
 import { Users } from 'lucide-react';
+import useSWR from 'swr';
 
-function InviteUser() {
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
+function ManageUsers() {
   const { user } = useUser();
   const room = useRoom();
   const isOwner = useOwner();
   const [isOpen, setIsOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [usersInRoom] = useCollection(
-    user && query(collectionGroup(db, 'rooms'), where('roomId', '==', room.id))
-  );
+  const { data } = useSWR('/api/documents', fetcher);
 
   const handleDelete = (userId: string) => {
     startTransition(async () => {
@@ -41,9 +39,12 @@ function InviteUser() {
     });
   };
 
+  const usersInRoom =
+    data?.userRooms?.filter((doc: any) => doc.roomId === room.id) || [];
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <Button asChild variant={'outline'}>
+      <Button asChild variant='outline'>
         <DialogTrigger>
           <Users />
         </DialogTrigger>
@@ -57,21 +58,18 @@ function InviteUser() {
         </DialogHeader>
         <hr className='my-2' />
         <div className='flex flex-col space-y-2'>
-          {usersInRoom?.docs.map((doc) => (
-            <div
-              key={doc.data().userId}
-              className='flex item-center justify-between'
-            >
+          {usersInRoom.map((doc: any) => (
+            <div key={doc.userId} className='flex items-center justify-between'>
               <p>
-                {doc.data().userId === user?.emailAddresses[0]
-                  ? `You (${doc.data().userId})`
-                  : doc.data().userId}
+                {doc.userId === user?.emailAddresses[0]
+                  ? `You (${doc.userId})`
+                  : doc.userId}
               </p>
               <div className='flex items-center gap-2'>
-                <Button variant={'outline'}>{doc.data().role}</Button>
-                {isOwner && doc.data().userId !== user?.emailAddresses[0] && (
+                <Button variant='outline'>{doc.role}</Button>
+                {isOwner && doc.userId !== user?.emailAddresses[0] && (
                   <Button
-                    onClick={() => handleDelete(doc.data().userId)}
+                    onClick={() => handleDelete(doc.userId)}
                     disabled={isPending}
                   >
                     {isPending ? 'Removing...' : 'X'}
@@ -86,4 +84,4 @@ function InviteUser() {
   );
 }
 
-export default InviteUser;
+export default ManageUsers;
